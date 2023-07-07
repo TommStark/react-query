@@ -4,6 +4,7 @@ import { Issue, State } from '../interfaces';
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getIssueComments, getIssueInfo } from '../hooks/useIssue';
+import { timeSince } from '../../helpers';
 
 
 
@@ -64,8 +65,19 @@ export const IssueItem: FC<IssueItemProps> = ({ issue }) => {
                 }
                 <div className="d-flex flex-column flex-fill px-2">
                     <span>{splitText(issue.title)}</span>
-                    <span className="issue-subinfo">#{issue.number} opened 2 days ago by <span className='fw-bold'>{issue.user.login}</span></span>
-                </div>
+                    <span className="issue-subinfo">#{issue.number} opened {timeSince(issue.created_at)} ago by <span className='fw-bold'>{issue.user.login}</span></span>
+                    <span>
+                        {
+                            issue.labels.map(label => (
+                                <span 
+                                    key={label.id} 
+                                    className="badge rounded-pill me-1"
+                                    style={{backgroundColor: `#${label.color}`,color: 'black'}}
+                                >{label.name}</span>
+                            ))
+                        }
+                    </span>
+               </div>
 
                 <div className='d-flex align-items-center'>
                     <img src={issue.user.avatar_url} alt="User Avatar" className="avatar" />
